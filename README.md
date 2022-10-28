@@ -17,7 +17,10 @@ This code is for the paper **COVID-Net Assistant: A Deep Learning-Driven Virtual
 	<em>Figure 1: Overview  of COVID-Net Assistant workflow.</em>
 </p>
 
-**In this repository, we present covid cough models to demonstrate the effectiveness and speed of covid detection neural networks trained on cough datasets.**
+**COVID-Net Assistant is core part of COVID-Net, a global open source, open access initiative dedicated to accelerating advancement in machine learning to aid front-line healthcare workers and clinical institutions around the world fighting the continuing pandemic. Link to COVID-Net portal: [here](https://alexswong.github.io/COVID-Net/)**
+
+**Note: The COVID-Net models provided here are intended to be used as reference models that can be built upon and enhanced as new data becomes available. They are currently at a research stage and not yet intended as production-ready models (not meant for direct clinical diagnosis), and we are working continuously to improve them as new data becomes available. Please do not use COVID-Net for self-diagnosis and seek help from your local health authorities.**
+
 
 ## Abstract
 
