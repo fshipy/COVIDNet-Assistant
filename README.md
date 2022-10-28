@@ -12,7 +12,7 @@ This code is for the paper **COVID-Net Assistant: A Deep Learning-Driven Virtual
 **Link to the [paper](https://arxiv.org)[add link]**
 
 <p align="center">
-	<img src="image/covidnet_assitant_workflow.png" alt="photo not available" width="50%" height="50%">
+	<img src="image/covidnet_assitant_workflow.png" alt="photo not available" width="70%" height="70%">
 	<br>
 	<em>Figure 1: Overview  of COVID-Net Assistant workflow.</em>
 </p>
