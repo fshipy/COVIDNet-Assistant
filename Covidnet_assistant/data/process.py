@@ -103,7 +103,6 @@ def feature_extraction(inputs, save_plot_path=None):
             splits = np.concatenate((splits, raw_audio[interval[0] : interval[1]]))
         raw_audio = splits
     if len(raw_audio) == 0:
-        print(key)
         raise ValueError
     length = time_to_samples(config.length_ms / 1000, config.sample_rate)
     audio = np.asarray(fix_length(raw_audio, length), dtype=np.float32)
