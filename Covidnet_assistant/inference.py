@@ -10,6 +10,7 @@ import tensorflow as tf
 
 from data import feature_extraction
 
+
 @dataclass
 class InferenceConfig:
     sample_rate: int
@@ -26,28 +27,35 @@ class InferenceConfig:
     def __post_init__(self):
         assert self.n_mfcc <= self.n_mels
 
+
 def add_noise(audio, noise_level=0.000001):
     noise = np.random.normal(0, noise_level, audio.shape[0])
     return noise + audio
 
+
 def process_audio(audio_path, config, save_plot_path):
     audio = librosa.load(audio_path.resolve(), sr=config.sample_rate)[0]
-    _, processed_audio = feature_extraction((None, audio, config), save_plot_path=save_plot_path)
+    _, processed_audio = feature_extraction(
+        (None, audio, config), save_plot_path=save_plot_path
+    )
     return np.expand_dims(processed_audio, axis=(0, -1))
+
 
 def inference_h5(model_path, audio):
     model = keras.models.load_model(model_path)
     y_pred = model.predict(audio)[0]
     return np.argmax(y_pred), y_pred[0], y_pred[1]
 
+
 def inference_graph(model_path, audio):
     with tf.Session() as sess:
-        saver = tf.train.import_meta_graph(os.path.join(model_path, 'model.meta'))
+        saver = tf.train.import_meta_graph(os.path.join(model_path, "model.meta"))
         saver.restore(sess, tf.train.latest_checkpoint(model_path))
-        writer = tf.summary.FileWriter(os.path.join(model_path, 'graph'), sess.graph)
+        writer = tf.summary.FileWriter(os.path.join(model_path, "graph"), sess.graph)
         y_pred = sess.run("output/Softmax:0", feed_dict={"input:0": audio})[0]
         writer.close()
     return np.argmax(y_pred), y_pred[0], y_pred[1]
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Inference for covid cough models.")
@@ -82,8 +90,15 @@ if __name__ == "__main__":
         default=False,
         help="Use trim or not.",
     )
-    parser.add_argument("--trim_ref", type=int, default=20, help="ref when trimming audios.")
-    parser.add_argument("--save_plot_location", type=str, default="inference_plot", help="Path to model.")
+    parser.add_argument(
+        "--trim_ref", type=int, default=20, help="ref when trimming audios."
+    )
+    parser.add_argument(
+        "--save_plot_location",
+        type=str,
+        default="inference_plot",
+        help="Path to model.",
+    )
 
     args = parser.parse_args()
     inference_config = InferenceConfig(
@@ -93,16 +108,18 @@ if __name__ == "__main__":
             if k.name in vars(args)
         }
     )
-    if args.model_type == "h5": 
+    if args.model_type == "h5":
         inference = inference_h5
-    elif args.model_type == "graph": 
+    elif args.model_type == "graph":
         inference = inference_graph
     else:
         print("Unrecognized model type, should be either h5 or graph!")
-        exit(1) 
+        exit(1)
 
-    inference_result, neg_conf, pos_conf = inference(args.model, process_audio(args.audio, inference_config, args.save_plot_location))
-    
+    inference_result, neg_conf, pos_conf = inference(
+        args.model, process_audio(args.audio, inference_config, args.save_plot_location)
+    )
+
     if inference_result == 0:
         print("Negative;", "Confidence:", neg_conf)
     else:

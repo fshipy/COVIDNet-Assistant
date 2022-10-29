@@ -56,10 +56,14 @@ class DataConfig:
 def augment(audio_with_meta, config):
     augments = Compose(
         [
-            AddGaussianNoise(min_amplitude=0.001 * config.augment_strength, max_amplitude=0.01 * config.augment_strength, p=0.5),
+            AddGaussianNoise(
+                min_amplitude=0.001 * config.augment_strength,
+                max_amplitude=0.01 * config.augment_strength,
+                p=0.5,
+            ),
             TimeStretch(
-                min_rate=max(1-0.01 * config.augment_strength, 0.00001),
-                max_rate=min(1+0.01 * config.augment_strength, 10),
+                min_rate=max(1 - 0.01 * config.augment_strength, 0.00001),
+                max_rate=min(1 + 0.01 * config.augment_strength, 10),
                 p=0.75,
             ),
             PitchShift(
@@ -87,8 +91,10 @@ def augment(audio_with_meta, config):
             augmentations[name] = {**data, "audio": audio}
     return augmentations
 
+
 def audio_normalization(audio):
     return librosa.util.normalize(audio)
+
 
 def feature_extraction(inputs, save_plot_path=None):
     key, raw_audio, config = inputs
@@ -135,9 +141,12 @@ def preprocess(audio_with_meta, config, parallelism, is_train):
     # augmentation
     if config.use_augmentation and is_train:
         # augment the positive ones
-        augmentations = augment(audio_with_meta, config) #positives
+        augmentations = augment(audio_with_meta, config)  # positives
         audio_with_meta = {**audio_with_meta, **augmentations}
-    items = [feature_extraction((key, data["audio"], config)) for key, data in tqdm(audio_with_meta.items())]
+    items = [
+        feature_extraction((key, data["audio"], config))
+        for key, data in tqdm(audio_with_meta.items())
+    ]
     for key, processed_audio in items:
         audio_with_meta[key]["audio"] = processed_audio
 
@@ -286,7 +295,9 @@ if __name__ == "__main__":
         help="Use verified only set.",
     )
     parser.add_argument("--n_mels", type=int, default=32, help="Number of mels.")
-    parser.add_argument("--trim_ref", type=int, default=20, help="ref when trimming audios.")
+    parser.add_argument(
+        "--trim_ref", type=int, default=20, help="ref when trimming audios."
+    )
     parser.add_argument("--n_mfcc", type=int, default=32, help="Number of mfccs.")
     parser.add_argument("--n_fft", type=int, default=2048, help="Number of ffts.")
     parser.add_argument(
@@ -331,7 +342,7 @@ if __name__ == "__main__":
         help="Use normalization or not.",
     )
     args = parser.parse_args()
-    #assert args.augment_strength <= 50, "augment_strength should be no larger than 50"
+    # assert args.augment_strength <= 50, "augment_strength should be no larger than 50"
     data_config = DataConfig(
         **{
             k.name: getattr(args, k.name)

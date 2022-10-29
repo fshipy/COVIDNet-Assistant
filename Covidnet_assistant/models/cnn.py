@@ -2,6 +2,7 @@ import tensorflow.keras.layers as layers
 from tensorflow.keras.models import Model
 from .utils import classifier
 
+
 def cnn_model(inp, dropout=0.0, n_class=2, n_extra_block=0):
     x = layers.Conv2D(32, 3, padding="same", activation="relu")(inp)
     x = layers.Conv2D(32, 3, padding="same", activation="relu")(x)

@@ -9,9 +9,9 @@ from . import models
 from data import CovidCoughDataset
 import os
 import tensorflow as tf
-from utility.train_utils import *
 import numpy as np
 import matplotlib.pyplot as plt
+
 
 @dataclass
 class TrainConfig:
@@ -45,11 +45,17 @@ def train(model_name, train_dataset, val_dataset, model_dir, train_plot_cache, c
     for fold in range(config.folds):
         model = choose_model(model_name, train_dataset, config)
         train_dataset.set_fold(fold, config.folds)
-        train_y = np.argmax(train_dataset.labels, -1) if config.binary_class else train_dataset.labels
-        val_y = np.argmax(val_dataset.labels, -1) if config.binary_class else val_dataset.labels
-        val_auc = models.AUCCallback(
-            val_dataset.data, val_y, auc_name="my_val_auc"
+        train_y = (
+            np.argmax(train_dataset.labels, -1)
+            if config.binary_class
+            else train_dataset.labels
         )
+        val_y = (
+            np.argmax(val_dataset.labels, -1)
+            if config.binary_class
+            else val_dataset.labels
+        )
+        val_auc = models.AUCCallback(val_dataset.data, val_y, auc_name="my_val_auc")
         train_auc = models.AUCCallback(
             train_dataset.data, train_y, auc_name="my_train_auc"
         )
@@ -61,7 +67,7 @@ def train(model_name, train_dataset, val_dataset, model_dir, train_plot_cache, c
             save_best_only=True,
             verbose=0,
         )
-        
+
         lr_schedule = None
         if config.lr_scheduler == "PiecewiseConstantDecay":
             boundaries = [val * len(train_dataset) for val in [0, 10, 20, 30, 40, 75]]
@@ -73,17 +79,21 @@ def train(model_name, train_dataset, val_dataset, model_dir, train_plot_cache, c
             )
         elif config.lr_scheduler == "ExponentialDecay":
             lr_schedule = keras.optimizers.schedules.ExponentialDecay(
-                config.initial_learning_rate, config.lr_decay_steps, config.lr_decay_rate
-            )
-        elif config.lr_scheduler == "CosineDecay":
-            lr_schedule = CosineDecay(
-                config.initial_learning_rate, config.lr_decay_steps
+                config.initial_learning_rate,
+                config.lr_decay_steps,
+                config.lr_decay_rate,
             )
         if lr_schedule:
             optimizer = keras.optimizers.Adam(learning_rate=lr_schedule)
         else:
-            optimizer = keras.optimizers.Adam(learning_rate=config.initial_learning_rate)
-        loss = keras.losses.BinaryCrossentropy() if config.binary_class else keras.losses.CategoricalCrossentropy()
+            optimizer = keras.optimizers.Adam(
+                learning_rate=config.initial_learning_rate
+            )
+        loss = (
+            keras.losses.BinaryCrossentropy()
+            if config.binary_class
+            else keras.losses.CategoricalCrossentropy()
+        )
         model.compile(
             optimizer=optimizer,
             loss=loss,
@@ -104,20 +114,24 @@ def train(model_name, train_dataset, val_dataset, model_dir, train_plot_cache, c
             n_pos = sum(train_dataset.labels[:, 0] == 1)
             n_total = len(train_dataset.labels)
             class_weight = {
-                0 : (1 / n_neg) * (n_total / 2.0),
-                1 : (1 / n_pos) * (n_total / 2.0)
+                0: (1 / n_neg) * (n_total / 2.0),
+                1: (1 / n_pos) * (n_total / 2.0),
             }
             print("class_weight:", class_weight)
             print(n_neg, n_pos, n_total)
-        
-        callbacks=[
-                    train_auc,
-                    val_auc,
-                    model_ckpt_callback,
-                    TqdmCallback(epochs=config.epochs, verbose=0),  
+
+        callbacks = [
+            train_auc,
+            val_auc,
+            model_ckpt_callback,
+            TqdmCallback(epochs=config.epochs, verbose=0),
         ]
         if config.early_stopping:
-            callbacks.append(tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=config.early_stopping_patience))
+            callbacks.append(
+                tf.keras.callbacks.EarlyStopping(
+                    monitor="val_loss", patience=config.early_stopping_patience
+                )
+            )
         if config.reduce_lr_plateau:
             callbacks.append(
                 tf.keras.callbacks.ReduceLROnPlateau(
@@ -131,7 +145,7 @@ def train(model_name, train_dataset, val_dataset, model_dir, train_plot_cache, c
             history = model.fit(
                 x=train_dataset.data,
                 y=np.argmax(train_dataset.labels, -1),
-                validation_data=(val_dataset.data,np.argmax(val_dataset.labels, -1)),
+                validation_data=(val_dataset.data, np.argmax(val_dataset.labels, -1)),
                 batch_size=train_dataset.batch_size,
                 epochs=config.epochs,
                 shuffle=True,
@@ -148,32 +162,43 @@ def train(model_name, train_dataset, val_dataset, model_dir, train_plot_cache, c
                 callbacks=callbacks,
                 class_weight=class_weight,
             )
-        plot_metrics(history, model_name, os.path.join(train_plot_cache, f"train_log_{model_name}.png"))
+        plot_metrics(
+            history,
+            model_name,
+            os.path.join(train_plot_cache, f"train_log_{model_name}.png"),
+        )
+
 
 def plot_metrics(history, model_name, save_fig="train_log.png"):
     plt.figure(figsize=(16, 16))
-    metrics = ["loss", 'auc', 'recall', 'precision', 'acc', "tn", 'tp', 'fp', 'fn']
+    metrics = ["loss", "auc", "recall", "precision", "acc", "tn", "tp", "fp", "fn"]
     for n, metric in enumerate(metrics):
-        name = metric.replace("_"," ").capitalize()
-        plt.subplot(3,3,n+1)
-        plt.plot(history.epoch, history.history[metric], label='Train')
-        plt.plot(history.epoch, history.history['val_'+metric],
-                 linestyle="--", label='Val')
-        plt.xlabel('Epoch')
+        name = metric.replace("_", " ").capitalize()
+        plt.subplot(3, 3, n + 1)
+        plt.plot(history.epoch, history.history[metric], label="Train")
+        plt.plot(
+            history.epoch, history.history["val_" + metric], linestyle="--", label="Val"
+        )
+        plt.xlabel("Epoch")
         plt.ylabel(name)
 
         plt.legend()
     plt.suptitle("Training " + model_name + " no balance", fontsize=14)
     plt.savefig(save_fig)
     plt.close()
-    
+
 
 def choose_model(model_name, train_dataset, config):
     inp = keras.Input(shape=train_dataset.data.shape[1:], name="input")
     model_name = model_name.lower()
-    n_class = 1 if config.binary_class else 2 
+    n_class = 1 if config.binary_class else 2
     if model_name.startswith("cnn"):
-        return models.cnn_model(inp, dropout=config.dropout, n_class=n_class, n_extra_block=config.cnn_extra_block)
+        return models.cnn_model(
+            inp,
+            dropout=config.dropout,
+            n_class=n_class,
+            n_extra_block=config.cnn_extra_block,
+        )
     elif model_name.startswith("resnet18"):
         return models.resnet18(inp, dropout=config.dropout, n_class=n_class)
     elif model_name.startswith("resnet"):
@@ -229,7 +254,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--model_name",
         required=True,
-        #choices=model_names,
+        # choices=model_names,
         help=f"Model name. Choose one from {model_names}.",
     )
 
@@ -308,7 +333,9 @@ if __name__ == "__main__":
         help="learning rate scheduler decay rate if necessary",
     )
     parser.add_argument(
-        "--override_model_params", action="store_true", help="use user defined config to override some pre-defined model config"
+        "--override_model_params",
+        action="store_true",
+        help="use user defined config to override some pre-defined model config",
     )
     parser.add_argument(
         "--early_stopping", action="store_true", help="Train with early stopping"
@@ -341,13 +368,10 @@ if __name__ == "__main__":
         help="ReduceLROnPlateau patience",
     )
 
-
-
     args = parser.parse_args()
 
     if not os.path.exists(args.train_plot_cache):
         os.makedirs(args.train_plot_cache)
-
 
     train_config = TrainConfig(
         **{
@@ -361,5 +385,12 @@ if __name__ == "__main__":
     val_dataset = CovidCoughDataset(args.val_data, train_config.batch_size)
 
     args.model_dir.mkdir(parents=True, exist_ok=True)
-    with tf.device(f'/device:GPU:{args.gpu_index}'):
-        train(args.model_name, train_dataset, val_dataset, args.model_dir, args.train_plot_cache, train_config)
+    with tf.device(f"/device:GPU:{args.gpu_index}"):
+        train(
+            args.model_name,
+            train_dataset,
+            val_dataset,
+            args.model_dir,
+            args.train_plot_cache,
+            train_config,
+        )

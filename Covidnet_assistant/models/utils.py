@@ -2,6 +2,7 @@ from sklearn.metrics import roc_auc_score
 from tensorflow.keras.callbacks import Callback
 import tensorflow.keras as tk
 import tensorflow.keras.layers as layers
+
 L2RegFunc = tk.regularizers.l2
 model_config = {
     "verified_only": {
@@ -110,15 +111,17 @@ model_config = {
     },
 }
 
+
 def classifier(x, n_class=2, dropout=0.0, l2_reg=0.0):
-    l2_reg = L2RegFunc(l2_reg) if l2_reg > 0 else None 
-    out_activation ="softmax" if n_class >= 2 else "sigmoid"
+    l2_reg = L2RegFunc(l2_reg) if l2_reg > 0 else None
+    out_activation = "softmax" if n_class >= 2 else "sigmoid"
     x = layers.GlobalAveragePooling2D()(x)
     if dropout > 0.0:
         x = layers.Dropout(dropout)(x)
     x = layers.Dense(n_class, kernel_regularizer=l2_reg)(x)
     outp = layers.Activation(out_activation, name="output")(x)
     return outp
+
 
 class AUCCallback(Callback):
     def __init__(self, x, y, auc_name):

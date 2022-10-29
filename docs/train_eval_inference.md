@@ -43,11 +43,3 @@ $python inference.py --model checkpoints/cnn-0.h5 \
                      --audio  audio.mp3
 ```
 For more options and information, `python inference.py --help`
-
-## Test Latency of Tensorflow Graph
-```bash
-$ python utility/eval_tf_graph.py --model <PathToTFGraph>/ \
-                                  --binary_class \
-                                  --latency_only
-```
-The script can also run performance evaluation `--test_data` option is provided 

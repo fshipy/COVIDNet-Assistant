@@ -6,6 +6,7 @@ from .utils import model_config, classifier
 
 L2RegFunc = tk.regularizers.l2
 
+
 def _conv_block(x, n_filters, kernel=(3, 3), strides=(1, 1), dropout=0.0, l2_reg=0.0):
     """
     initial conv block
@@ -100,7 +101,7 @@ def mobileNetV1(
             "depth_conv_strides"
         ]
         extra_block = model_config[t]["mobilenet"][arch_index]["extra_block"]
-    
+
     x = _conv_block(
         inp,
         32,
@@ -111,13 +112,16 @@ def mobileNetV1(
 
     block_pair = 0
     out_channel = 64
-    n_pairs = (len(kernels) -1) // 2
+    n_pairs = (len(kernels) - 1) // 2
     while block_pair < n_pairs:
         x = _depthwise_conv_block(
             x,
             out_channel,
             depth_multiplier,
-            depthwise_kernel_size=(kernels[block_pair * 2 + 1], kernels[block_pair * 2 + 1]),
+            depthwise_kernel_size=(
+                kernels[block_pair * 2 + 1],
+                kernels[block_pair * 2 + 1],
+            ),
             strides=(depth_conv_strides[block_pair], depth_conv_strides[block_pair]),
             dropout2=dropout,
             l2_reg=l2_reg,
@@ -127,12 +131,15 @@ def mobileNetV1(
             x,
             out_channel,
             depth_multiplier,
-            depthwise_kernel_size=(kernels[block_pair * 2 + 2], kernels[block_pair * 2 + 2]),
+            depthwise_kernel_size=(
+                kernels[block_pair * 2 + 2],
+                kernels[block_pair * 2 + 2],
+            ),
             l2_reg=l2_reg,
         )
         out_channel *= 2
         block_pair += 1
-    
+
     if extra_block:
         x = _depthwise_conv_block(x, out_channel, depth_multiplier, l2_reg=l2_reg)
 
@@ -141,7 +148,9 @@ def mobileNetV1(
     return model
 
 
-def full_mobileNet_s(inp, alpha=1, dropout=0.001, l2_reg=0.0, depth_multiplier=1, n_class=2):
+def full_mobileNet_s(
+    inp, alpha=1, dropout=0.001, l2_reg=0.0, depth_multiplier=1, n_class=2
+):
 
     x = _conv_block(inp, 32, kernel=(3, 3), strides=(2, 2), l2_reg=l2_reg)
     x = _depthwise_conv_block(

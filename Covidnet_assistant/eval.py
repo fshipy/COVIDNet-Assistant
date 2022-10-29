@@ -3,7 +3,14 @@ import tensorflow as tf
 from pathlib import Path
 import numpy as np
 import tensorflow.keras as keras
-from sklearn.metrics import roc_auc_score, recall_score, precision_score, f1_score, accuracy_score, average_precision_score
+from sklearn.metrics import (
+    roc_auc_score,
+    recall_score,
+    precision_score,
+    f1_score,
+    accuracy_score,
+    average_precision_score,
+)
 
 from data import CovidCoughDataset
 
@@ -39,8 +46,10 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
     test_dataset = CovidCoughDataset(args.test_data, args.batch_size)
-    with tf.device('/device:GPU:7'):
-        auc, recall, precision, f1, accuracy, ap_score = eval(args.model_path, test_dataset, args.binary_class)
+    with tf.device("/device:GPU:7"):
+        auc, recall, precision, f1, accuracy, ap_score = eval(
+            args.model_path, test_dataset, args.binary_class
+        )
     print("AUC score: ", auc)
     print("Recall score: ", recall)
     print("Precision score: ", precision)

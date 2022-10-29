@@ -3,7 +3,9 @@ import tensorflow.keras as tk
 from tensorflow.keras.models import Model
 
 from .utils import model_config, classifier
+
 L2RegFunc = tk.regularizers.l2
+
 
 def res_block(x, n_filters, k_size=3, downsample=False, dropout=0.0):
     fx = layers.Conv2D(
@@ -80,7 +82,9 @@ def resnet(
         x = res_block(x, 32 * 2, k_size=kernels[1], downsample=True, dropout=dropout)
         x = res_block(x, 32 * 2, k_size=kernels[2])
         if len(kernels) > 4:
-            x = res_block(x, 64 * 2, k_size=kernels[3], downsample=True, dropout=dropout)
+            x = res_block(
+                x, 64 * 2, k_size=kernels[3], downsample=True, dropout=dropout
+            )
             x = res_block(x, 64 * 2, k_size=kernels[4])
     else:
         x = layers.Conv2D(
