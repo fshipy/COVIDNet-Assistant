@@ -24,7 +24,7 @@ This code is for the paper **COVID-Net Assistant: A Deep Learning-Driven Virtual
 
 ## Abstract
 
-As the COVID-19 pandemic continues to put significant burden on healthcare systems around the world, there has been growing interest into finding inexpensive symptom pre-screening and recommendation methods to assist in efficient use of available medical resources such as PCR tests. In this study, we introduce the design of COVID-Net Assistant, an efficient virtual assistant designed to provide symptom prediction and recommendations for COVID-19 by analyzing users' cough recordings through deep convolutional neural networks. We explore a variety of highly customized, lightweight convolutional neural network architectures generated via machine-driven design exploration (which we refer to as COVID-Net Assistant neural networks) on the Covid19-Cough benchmark dataset comprised of 381 cough recordings from a COVID-19 positive cohort verified by PCR test. Our experimental results shows promising, with the COVID-Net Assistant neural networks demonstrating robust predictive performance, achieving AUC scores of over 0.93, with the best score over 0.95 while being fast and efficient in inference.  The COVID-Net Assistant models made available in an open source manner through the COVID-Net open initiative and, while not a production-ready solution, we hope their availability acts as a good resource for clinical scientists, machine learning researchers, as well as citizen scientists to develop innovative solutions. © 2022 .
+As the COVID-19 pandemic continues to put a significant burden on healthcare systems worldwide, there has been growing interest in finding inexpensive symptom pre-screening and recommendation methods to assist in efficiently using available medical resources such as PCR tests. In this study, we introduce the design of COVID-Net Assistant, an efficient virtual assistant designed to provide symptom prediction and recommendations for COVID-19 by analyzing users' cough recordings through deep convolutional neural networks. We explore a variety of highly customized, lightweight convolutional neural network architectures generated via machine-driven design exploration (which we refer to as COVID-Net Assistant neural networks) on the Covid19-Cough benchmark dataset. The Covid19-Cough dataset comprises 682 cough recordings from a COVID-19 positive cohort and 642 from a COVID-19 negative cohort. Among the 682 cough recordings labeled positive, 382 recordings were verified by PCR test. Our experimental results show promising, with the COVID-Net Assistant neural networks demonstrating robust predictive performance, achieving AUC scores of over 0.93, with the best score over 0.95 while being fast and efficient in inference. The COVID-Net Assistant models are made available in an open source manner through the COVID-Net open initiative and, while not a production-ready solution, we hope their availability acts as a good resource for clinical scientists, machine learning researchers, as well as citizen scientists to develop innovative solutions.  © 2022 .
 
 
 ## Table of Contents
@@ -65,8 +65,11 @@ If there are any technical questions after the README, FAQ, and past/current iss
 #### Citation (TODO add citation)
 
 ```
-@article{
 
+@article{
+title={COVID-Net Assistant: A Deep Learning-Driven Virtual Assistant for Early COVID-19 Recommendation},
+author={Shi, Pengyuan and Wang, Yuetong and Abbasi, Saad and Wong, Alexander},
+year={2022}
 }
 
 ```
