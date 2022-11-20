@@ -13,7 +13,7 @@ These models are trained and tested on the Verified-Only Split of Covid19-Cough 
 Seed Design used to generate final COVID-Net Assistant architectures via Generative Synthesis.
 
 <p align="left">
-	<img src="../image/covidnet_assitant_seed_design.png" alt="photo not available" width="40%" height="40%">
+	<img src="../image/covidnet_assitant_seed_design.png" alt="photo not available" width="60%" height="60%">
 	<br>
 </p>
 
