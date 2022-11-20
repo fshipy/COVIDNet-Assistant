@@ -10,7 +10,7 @@ For example, a COVID-Net Assistant model generated with Res-CNN-S seed design (i
 These models are trained and tested on the Verified-Only Split of Covid19-Cough dataset
 
 ## Seed Architectures
-Seed Design used to generate final COVID-Net Assistant architectures via Generative Synthesis.
+Seed Design used to generate final COVID-Net Assistant architectures via Generative Synthesis:
 
 <p align="left">
 	<img src="../image/covidnet_assitant_seed_design.png" alt="photo not available" width="60%" height="60%">
