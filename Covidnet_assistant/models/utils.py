@@ -8,19 +8,19 @@ model_config = {
     "verified_only": {
         "cnn": {"dropout": 0.0},
         "resnet": {
-            0: {
+            0: { # Res-CNN-S
                 "trimmed": True,
                 "dropout": 0.01,
                 "conv_stride": 2,
                 "kernels": [3, 3, 3],
             },
-            1: {
+            1: { # Res-CNN-M
                 "trimmed": True,
                 "dropout": 0.275,
                 "conv_stride": 2,
                 "kernels": [3, 3, 3, 3, 3],
             },
-            2: {
+            2: { # Res-CNN-L
                 "trimmed": True,
                 "dropout": 0.275,
                 "conv_stride": 2,
@@ -28,7 +28,7 @@ model_config = {
             },
         },
         "mobilenet": {
-            0: {
+            0: { # DW-CNN-S
                 "depth_multiplier": 1,
                 "dropout": 0.04,
                 "l2_reg": 0.015,
@@ -37,7 +37,7 @@ model_config = {
                 "depth_conv_strides": [2],
                 "extra_block": True,
             },
-            1: {
+            1: { # DW-CNN-M
                 "depth_multiplier": 1,
                 "dropout": 0.04,
                 "l2_reg": 0.015,
@@ -46,7 +46,7 @@ model_config = {
                 "depth_conv_strides": [2, 2, 2],
                 "extra_block": False,
             },
-            2: {
+            2: { # DW-CNN-L
                 "depth_multiplier": 1,
                 "dropout": 0.6,
                 "l2_reg": 0.02,
@@ -60,19 +60,19 @@ model_config = {
     "all": {
         "cnn": {"dropout": 0.1},
         "resnet": {
-            0: {
+            0: { # Res-CNN-S
                 "trimmed": True,
                 "dropout": 0.01,
                 "conv_stride": 2,
                 "kernels": [3, 3, 3],
             },
-            1: {
+            1: { # Res-CNN-M
                 "trimmed": True,
                 "dropout": 0.42,
                 "conv_stride": 2,
                 "kernels": [3, 3, 3, 3, 3],
             },
-            2: {
+            2: { # Res-CNN-L
                 "trimmed": True,
                 "dropout": 0.45,
                 "conv_stride": 2,
@@ -80,7 +80,7 @@ model_config = {
             },
         },
         "mobilenet": {
-            0: {
+            0: { # DW-CNN-S
                 "depth_multiplier": 1,
                 "dropout": 0.04,
                 "l2_reg": 0.015,
@@ -89,7 +89,7 @@ model_config = {
                 "depth_conv_strides": [2],
                 "extra_block": True,
             },
-            1: {
+            1: { # DW-CNN-M
                 "depth_multiplier": 1,
                 "dropout": 0.06,
                 "l2_reg": 0.0,
@@ -98,7 +98,7 @@ model_config = {
                 "depth_conv_strides": [2, 2, 2],
                 "extra_block": False,
             },
-            2: {
+            2: { # DW-CNN-L
                 "depth_multiplier": 1,
                 "dropout": 0.10,
                 "l2_reg": 0.01,
