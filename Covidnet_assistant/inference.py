@@ -41,19 +41,23 @@ def process_audio(audio_path, config, save_plot_path):
     return np.expand_dims(processed_audio, axis=(0, -1))
 
 
-def inference_h5(model_path, audio):
+def inference_h5(model_path, audio, is_binary=True, threshold=0.5):
     model = keras.models.load_model(model_path)
     y_pred = model.predict(audio)[0]
+    if is_binary:
+        return y_pred >= threshold, 1 - y_pred, y_pred
     return np.argmax(y_pred), y_pred[0], y_pred[1]
 
 
-def inference_graph(model_path, audio):
+def inference_graph(model_path, audio, is_binary=True, threshold=0.5):
     with tf.Session() as sess:
         saver = tf.train.import_meta_graph(os.path.join(model_path, "model.meta"))
         saver.restore(sess, tf.train.latest_checkpoint(model_path))
         writer = tf.summary.FileWriter(os.path.join(model_path, "graph"), sess.graph)
         y_pred = sess.run("output/Softmax:0", feed_dict={"input:0": audio})[0]
         writer.close()
+    if is_binary:
+        return y_pred >= threshold, 1 - y_pred, y_pred
     return np.argmax(y_pred), y_pred[0], y_pred[1]
 
 
@@ -99,6 +103,18 @@ if __name__ == "__main__":
         default="inference_plot",
         help="Path to model.",
     )
+    parser.add_argument(
+        "--gpu_index",
+        type=int,
+        default=0,
+        help="which gpu to use",
+    )
+    parser.add_argument(
+        "--binary_class", action="store_true", help="Train with binary class mode"
+    )
+    parser.add_argument(
+        "--threshold", type=float, default=0.5, help="ref when trimming audios."
+    )
 
     args = parser.parse_args()
     inference_config = InferenceConfig(
@@ -116,9 +132,19 @@ if __name__ == "__main__":
         print("Unrecognized model type, should be either h5 or graph!")
         exit(1)
 
-    inference_result, neg_conf, pos_conf = inference(
-        args.model, process_audio(args.audio, inference_config, args.save_plot_location)
-    )
+    if len(tf.config.experimental.list_physical_devices('GPU')) == 0:
+        device = tf.device("/CPU")
+        print("train device:", "/CPU")
+    else:
+        device = tf.device(f"/device:GPU:{args.gpu_index}")
+        print("train device:", f"/device:GPU:{args.gpu_index}")
+    with device:
+        inference_result, neg_conf, pos_conf = inference(
+            args.model,
+            process_audio(args.audio, inference_config, args.save_plot_location),
+            is_binary=args.binary_class,
+            threshold=args.threshold
+        )
 
     if inference_result == 0:
         print("Negative;", "Confidence:", neg_conf)

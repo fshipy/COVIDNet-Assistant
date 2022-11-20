@@ -44,9 +44,22 @@ if __name__ == "__main__":
     parser.add_argument(
         "--binary_class", action="store_true", help="Train with binary class mode"
     )
+    parser.add_argument(
+        "--gpu_index",
+        type=int,
+        default=0,
+        help="which gpu to use",
+    )
     args = parser.parse_args()
     test_dataset = CovidCoughDataset(args.test_data, args.batch_size)
-    with tf.device("/device:GPU:7"):
+
+    if len(tf.config.experimental.list_physical_devices('GPU')) == 0:
+        device = tf.device("/CPU")
+        print("train device:", "/CPU")
+    else:
+        device = tf.device(f"/device:GPU:{args.gpu_index}")
+        print("train device:", f"/device:GPU:{args.gpu_index}")
+    with device:
         auc, recall, precision, f1, accuracy, ap_score = eval(
             args.model_path, test_dataset, args.binary_class
         )

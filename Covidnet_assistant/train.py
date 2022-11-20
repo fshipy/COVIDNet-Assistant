@@ -5,7 +5,7 @@ from pathlib import Path
 import tensorflow.keras as keras
 from tqdm.keras import TqdmCallback
 
-from . import models
+import models
 from data import CovidCoughDataset
 import os
 import tensorflow as tf
@@ -385,7 +385,14 @@ if __name__ == "__main__":
     val_dataset = CovidCoughDataset(args.val_data, train_config.batch_size)
 
     args.model_dir.mkdir(parents=True, exist_ok=True)
-    with tf.device(f"/device:GPU:{args.gpu_index}"):
+    
+    if len(tf.config.experimental.list_physical_devices('GPU')) == 0:
+        device = tf.device("/CPU")
+        print("train device:", "/CPU")
+    else:
+        device = tf.device(f"/device:GPU:{args.gpu_index}")
+        print("train device:", f"/device:GPU:{args.gpu_index}")
+    with device:
         train(
             args.model_name,
             train_dataset,

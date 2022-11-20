@@ -14,7 +14,6 @@ $ python train.py  --train_data .cache/train.pkl \
                    --initial_learning_rate 0.0003 \
                    --epochs 150 \
                    --folds 1 \
-                   --gpu_index 0 \
                    --dropout 0.00001 \
                    --verified_only \
                    --balance_class \
@@ -41,6 +40,8 @@ For more options and information, `python eval.py --help`
 ## Inference
 ```bash
 $python inference.py --model checkpoints/cnn-0.h5 \
-                     --audio  audio.mp3
+                     --audio audio.mp3 \
+                     --binary_class \
+                     --model_type h5
 ```
 For more options and information, `python inference.py --help`
