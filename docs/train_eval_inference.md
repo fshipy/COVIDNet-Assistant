@@ -26,6 +26,7 @@ $ python train.py  --train_data .cache/train.pkl \
                    --reduce_lr_plateau_patience 2
 ```
 `model_name` may also have a prefix of `resnet` or `mobilenet`.
+We may also specify `arch_index` to use pre-defined seed design in `Covidnet_assistant/models/utils.py`.
 For more options and information, `python train.py --help`
 
 ## Evaluation
