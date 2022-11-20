@@ -52,7 +52,8 @@ $ python data/process.py --split_file split_verified.json \
                          --cache_dir  .cache \
                          --data_dir ./dataset \
                          --parallelism 16 \
-                         --train_size 0.8 \
+                         --train_size 0.6 \
+                         --val_size 0.2 \
                          --seed 42 \
                          --output_train .cache/train.pkl \
                          --output_val .cache/val.pkl \
