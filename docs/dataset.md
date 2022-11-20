@@ -29,15 +29,15 @@ We use the dataset in 2 settings, the all data setting and the verified only set
 
 Use every audio piece except the above two bad audio pieces
 ```bash
-$ python Covidnet_assistant/data/process.py --split_file split.json \
-                                            --cache_dir  .cache \
-                                            --data_dir ./dataset \
-                                            --parallelism 16 \
-                                            --train_size 0.8 \
-                                            --seed 42 \
-                                            --output_train .cache/train.pkl \
-                                            --output_val .cache/val.pkl \
-                                            --output_test .cache/test.pkl
+$ python data/process.py --split_file split.json \
+                         --cache_dir  .cache \
+                         --data_dir ./dataset \
+                         --parallelism 16 \
+                         --train_size 0.8 \
+                         --seed 42 \
+                         --output_train .cache/train.pkl \
+                         --output_val .cache/val.pkl \
+                         --output_test .cache/test.pkl
 ```
 
 2. Verified only
@@ -47,16 +47,16 @@ covid test result OR negative test result. \
 The audio pieces associated with negative results are included becasue
 in the database, all verified pieces are associated with a positive result.
 ```bash
-$ python Covidnet_assistant/data/process.py --split_file split_verified.json \
-                                            --cache_dir  .cache \
-                                            --data_dir ./dataset \
-                                            --parallelism 16 \
-                                            --train_size 0.8 \
-                                            --seed 42 \
-                                            --output_train .cache/train.pkl \
-                                            --output_val .cache/val.pkl \
-                                            --output_test .cache/test.pkl \
-                                            --verified_only
+$ python data/process.py --split_file split_verified.json \
+                         --cache_dir  .cache \
+                         --data_dir ./dataset \
+                         --parallelism 16 \
+                         --train_size 0.8 \
+                         --seed 42 \
+                         --output_train .cache/train.pkl \
+                         --output_val .cache/val.pkl \
+                         --output_test .cache/test.pkl \
+                         --verified_only
 ```
 
 3. Augmentation
