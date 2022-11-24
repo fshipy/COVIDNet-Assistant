@@ -9,7 +9,7 @@
 
 This code is for the paper **COVID-Net Assistant: A Deep Learning-Driven Virtual Assistant for Early COVID-19 Recommendation** 
 
-**Link to the [paper](https://arxiv.org)[add link]**
+**Link to the [paper](https://arxiv.org/abs/2211.11944v1)**
 
 <p align="center">
 	<img src="image/covidnet_assitant_workflow.png" alt="photo not available" width="70%" height="70%">
@@ -65,11 +65,9 @@ If there are any technical questions after the README, FAQ, and past/current iss
 #### Citation (TODO add citation)
 
 ```
-
-@article{
-title={COVID-Net Assistant: A Deep Learning-Driven Virtual Assistant for Early COVID-19 Recommendation},
-author={Shi, Pengyuan and Wang, Yuetong and Abbasi, Saad and Wong, Alexander},
-year={2022}
+@article{covidnet-assistant,
+  author = {Shi, Pengyuan and Wang, Yuetong and Abbasi, Saad and Wong, Alexander},
+  title = {COVID-Net Assistant: A Deep Learning-Driven Virtual Assistant for COVID-19 Symptom Prediction and Recommendation},
+  year = {2022}
 }
-
 ```
