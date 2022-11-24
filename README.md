@@ -62,12 +62,14 @@ If there are any technical questions after the README, FAQ, and past/current iss
 * p23shi@uwaterloo.ca
 * y3222wan@uwaterloo.ca
 
-#### Citation (TODO add citation)
+#### Citation
 
 ```
 @article{covidnet-assistant,
   author = {Shi, Pengyuan and Wang, Yuetong and Abbasi, Saad and Wong, Alexander},
   title = {COVID-Net Assistant: A Deep Learning-Driven Virtual Assistant for COVID-19 Symptom Prediction and Recommendation},
-  year = {2022}
+  year = {2022},
+  doi = {10.48550/ARXIV.2211.11944},
+  url = {https://arxiv.org/abs/2211.11944},
 }
 ```
